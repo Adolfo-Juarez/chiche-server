@@ -106,6 +106,8 @@ public class CakeServiceImpl implements ICakeService{
         response.setOrderedAt(cake.getOrderedAt());
         response.setShape(cake.getShape());
         response.setSize(cake.getSize());
+        response.setSubtotal(cake.getSubtotal());
+        response.setTotal(cake.getTotal());
 
         return response;
     }

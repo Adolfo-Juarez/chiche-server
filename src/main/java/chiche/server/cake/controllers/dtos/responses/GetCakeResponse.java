@@ -15,6 +15,8 @@ public class GetCakeResponse {
     private String design;
     private String shape;
     private String size;
+    private Float subtotal;
+    private Float total;
     private Date orderedAt;
     private boolean finish;
 
