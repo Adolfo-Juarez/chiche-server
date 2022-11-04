@@ -5,13 +5,8 @@ import lombok.Setter;
 
 @Setter @Getter
 public class PostUserRequest {
-    // Por Hacer:
-    // - Agregar los atributos para este DTO
-
-    // No es necesario agregar los métodos setter y getter para este método.
-
-    // Este DTO es para mandar información para crear un nuevo registro
-    // de la entidad User en la base de datos
-
-    // Generar los DTOS necesarios para lo demás métodos si lo consideran necesario
+    private String username;
+    private String email;
+    private String password;
+    private String role ="client";
 }

@@ -1,8 +1,16 @@
 package chiche.server.user.services.interfaces;
 
-public interface IUserService {
-    // Por Hacer:
-    // - Genera las interfaces de lo métodos para los servicios
+import java.util.List;
 
-    // Recuerda que mínimo deberán haber 4 métodos (del protocolo HTTP)
+import chiche.server.user.controllers.dtos.requests.PostUserRequest;
+import chiche.server.user.controllers.dtos.requests.UpdateUserRequest;
+import chiche.server.user.controllers.dtos.responses.GetUserResponse;
+
+public interface IUserService {
+    public List<GetUserResponse> list ();
+    public GetUserResponse getByUsername(String username);
+    public GetUserResponse update(String username, UpdateUserRequest request);
+    public GetUserResponse create(PostUserRequest request);
+    public void delete(String username);
+
 }
