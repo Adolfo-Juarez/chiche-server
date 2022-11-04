@@ -10,5 +10,6 @@ public class UpdateCakeRequest {
     private String coverage;
     private String design;
     private String shape;
+    private String size;
     private boolean finish;
 }

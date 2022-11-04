@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Devtools
+src/main/java/chiche/server/Creator.sh
+
 ### STS ###
 .apt_generated
 .classpath

@@ -54,20 +54,40 @@ public class CakeServiceImpl implements ICakeService{
     public void delete(Long id) {
         repository.deleteById(id);
     }
- 
+
     private Cake updateCake(Long id, UpdateCakeRequest req){
 
         Cake cake = repository
         .findById(id)
         .orElseThrow(()-> new RuntimeException("No se ha encontrado un pastel para actualizar"));
 
-        cake.setBiscuit(req.getBiscuit());
-        cake.setCoverage(req.getCoverage());
-        cake.setDesign(req.getDesign());
-        cake.setFilling(req.getFilling());
-        cake.setShape(req.getShape());
+        if(!req.getBiscuit().isBlank()){
+            cake.setBiscuit(req.getBiscuit());
+        }
 
-        cake.setFinish(req.isFinish());
+        if(!req.getCoverage().isBlank()){
+            cake.setCoverage(req.getCoverage());
+        }
+
+        if(!req.getDesign().isBlank()){
+            cake.setDesign(req.getDesign());
+        }
+
+        if(!req.getFilling().isBlank()){
+            cake.setFilling(req.getFilling());
+        }
+
+        if(!req.getShape().isBlank()){
+            cake.setShape(req.getShape());
+        }
+
+        if(!req.isFinish()){
+            cake.setFinish(req.isFinish());
+        }
+
+        if(!req.getSize().isBlank()){
+            cake.setSize(req.getSize());
+        }
 
         return cake;
 
@@ -85,6 +105,7 @@ public class CakeServiceImpl implements ICakeService{
         response.setId(cake.getId());
         response.setOrderedAt(cake.getOrderedAt());
         response.setShape(cake.getShape());
+        response.setSize(cake.getSize());
 
         return response;
     }
@@ -98,6 +119,7 @@ public class CakeServiceImpl implements ICakeService{
         cake.setDesign(request.getDesign());
         cake.setFilling(request.getFilling());
         cake.setShape(request.getShape());
+        cake.setSize(request.getSize());
 
         cake.setFinish(false);
         cake.setOrderedAt(new Date());

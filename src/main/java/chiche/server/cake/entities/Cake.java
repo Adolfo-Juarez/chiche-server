@@ -25,6 +25,7 @@ public class Cake {
     private String coverage;
     private String design;
     private String shape;
+    private String size;
 
     private Date orderedAt;
     private boolean finish;

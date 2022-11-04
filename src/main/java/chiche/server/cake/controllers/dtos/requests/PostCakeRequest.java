@@ -10,4 +10,5 @@ public class PostCakeRequest {
     private String coverage;
     private String design;
     private String shape;
+    private String size;
 }
