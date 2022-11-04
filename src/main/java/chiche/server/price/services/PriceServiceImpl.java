@@ -85,4 +85,9 @@ public class PriceServiceImpl implements IPriceService{
         return repository.save(price);
     }
 
+    @Override
+    public float findByDescription(String description){
+        return repository.findByDescription(description).get(0).getPrice();
+    }
+
 }

@@ -13,12 +13,16 @@ import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.entities.Cake;
 import chiche.server.cake.repositories.ICakeRepository;
 import chiche.server.cake.services.interfaces.ICakeService;
+import chiche.server.price.services.interfaces.IPriceService;
 
 @Service
 public class CakeServiceImpl implements ICakeService{
 
     @Autowired
     ICakeRepository repository;
+
+    @Autowired
+    IPriceService priceService;
 
     @Override
     public List<GetCakeResponse> list() {
@@ -114,20 +118,41 @@ public class CakeServiceImpl implements ICakeService{
 
     private Cake postCakeReqToCake (PostCakeRequest request){
 
+        float subtotal=0;
         Cake cake = new Cake();
 
         cake.setBiscuit(request.getBiscuit());
+        subtotal += priceService.findByDescription(request.getBiscuit());
+
         cake.setCoverage(request.getCoverage());
+        subtotal += priceService.findByDescription(request.getCoverage());
+
         cake.setDesign(request.getDesign());
+        subtotal += priceService.findByDescription(request.getDesign());
+
         cake.setFilling(request.getFilling());
+        subtotal += priceService.findByDescription(request.getFilling());
+        
         cake.setShape(request.getShape());
+        subtotal += priceService.findByDescription(request.getShape());
+
         cake.setSize(request.getSize());
+        subtotal += priceService.findByDescription(request.getSize());
+
+        cake.setSubtotal(subtotal);
+        cake.setTotal((subtotal/100)*116);
+
 
         cake.setFinish(false);
         cake.setOrderedAt(new Date());
 
         return cake;
 
+    }
+
+    @Override
+    public Cake findById(Long id) {
+        return repository.findById(id).orElseThrow(()-> new RuntimeException("Pastel no encontrado"));
     }
 
 }

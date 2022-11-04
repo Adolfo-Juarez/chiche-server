@@ -15,5 +15,6 @@ public interface IPriceService {
 
     public GetPriceResponse update(UpdatePriceRequest update, String description);
     public void remove(Long id);
+    public float findByDescription(String description);
 
 }

@@ -1,8 +1,13 @@
 package chiche.server.order.services.interfaces;
 
-public interface IOrderService {
-    // Por Hacer:
-    // - Genera las interfaces de lo métodos para los servicios
+import java.util.List;
 
-    // Recuerda que mínimo deberán haber 4 métodos (del protocolo HTTP)
+import chiche.server.order.controllers.dtos.requests.PostOrderRequest;
+import chiche.server.order.controllers.dtos.responses.GetOrderResponse;
+
+public interface IOrderService {
+    public GetOrderResponse create(PostOrderRequest request);
+    public List<GetOrderResponse> list();
+    public List<GetOrderResponse> getByUserName(String username);
+    public void delete(Long id);
 }
