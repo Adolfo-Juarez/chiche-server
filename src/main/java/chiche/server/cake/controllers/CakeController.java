@@ -3,6 +3,7 @@ package chiche.server.cake.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import chiche.server.cake.controllers.dtos.requests.UpdateCakeRequest;
 import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.services.interfaces.ICakeService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("cake")
 public class CakeController {
