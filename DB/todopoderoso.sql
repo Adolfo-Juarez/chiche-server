@@ -90,7 +90,7 @@ ADD
 
 -- Insercciones
 INSERT INTO
-    chiche.users (id, email, password, role, username)
+    users (id, email, password, role, username)
 VALUES
     (
         NULL,
@@ -108,14 +108,18 @@ VALUES
     );
 
 INSERT INTO
-    chiche.prices (id, description, price, type)
+    prices (id, description, price, type)
 VALUES
     (NULL, 'chocolate', '45', 'bizcocho'),
     (NULL, 'vainilla', '47', 'bizcocho'),
     (NULL, 'funfetti', '52', 'bizcocho'),
     (NULL, 'red velvet', '55', 'bizcocho'),
     (NULL, 'café', '56', 'bizcocho'),
-    (NULL, 'oreo', '46', 'bizcocho'),
+    (NULL, 'oreo', '46', 'bizcocho');
+
+INSERT INTO
+    prices (id, description, price, type)
+VALUES
     (NULL, 'mermelada de fresa', '35', 'relleno'),
     (NULL, 'cajeta', '32', 'relleno'),
     (NULL, 'betún de café', '37', 'relleno'),
@@ -124,30 +128,38 @@ VALUES
     (NULL, 'betún de cereza', '39', 'relleno'),
     (NULL, 'ganage de Hersheys', '43', 'relleno'),
     (NULL, 'betún de queso crema', '41', 'relleno'),
-    (NULL, 'betún de oreo', '41', 'relleno'),
+    (NULL, 'betún de oreo', '41', 'relleno');
+
+INSERT INTO
+    `prices` (`id`, `description`, `price`, `type`)
+VALUES
     (NULL, 'betún de mantequilla', '39', 'cobertura'),
     (NULL, 'crema pastelera', '36', 'cobertura'),
     (NULL, 'impresiones', '34', 'diseño'),
     (NULL, 'con crema de mantequilla', '36', 'diseño'),
     (NULL, 'circular', '0', 'forma'),
-    (NULL, 'corazon', '23', 'forma'),
+    (NULL, 'corazon', '23', 'forma');
+
+INSERT INTO
+    `prices` (`id`, `description`, `price`, `type`)
+VALUES
     (NULL, 'pequeño', '100', 'tamaño'),
     (NULL, 'mediano', '200', 'tamaño'),
     (NULL, 'grande', '300', 'tamaño');
 
 INSERT INTO
-    chiche.cakes (
-        id,
-        biscuit,
-        coverage,
-        design,
-        filling,
-        finish,
-        ordered_at,
-        shape,
-        size,
-        subtotal,
-        total
+    `cakes` (
+        `id`,
+        `biscuit`,
+        `coverage`,
+        `design`,
+        `filling`,
+        `finish`,
+        `ordered_at`,
+        `shape`,
+        `size`,
+        `subtotal`,
+        `total`
     )
 VALUES
     (
@@ -156,7 +168,7 @@ VALUES
         'betún de mantequilla',
         'impresiones',
         'cajeta',
-        0,
+        b '0',
         '2022-11-04 02:41:52',
         'circular',
         'grande',
