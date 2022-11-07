@@ -31,7 +31,7 @@ public class UserController {
         return service.list();
     }
 
-    @GetMapping("{username}")
+    @PostMapping("{username}")
     public LoginUserResponse getByUsername(@PathVariable String username, @RequestBody LoginUserRequest request){
         return service.login(username, request);
     }
