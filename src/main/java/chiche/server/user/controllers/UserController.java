@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import chiche.server.user.controllers.dtos.requests.LoginUserRequest;
 import chiche.server.user.controllers.dtos.requests.PostUserRequest;
 import chiche.server.user.controllers.dtos.requests.UpdateUserRequest;
 import chiche.server.user.controllers.dtos.responses.GetUserResponse;
+import chiche.server.user.controllers.dtos.responses.LoginUserResponse;
 import chiche.server.user.services.interfaces.IUserService;
 
 @RestController
@@ -30,12 +32,12 @@ public class UserController {
     }
 
     @GetMapping("{username}")
-    public GetUserResponse getByUsername(@PathVariable String username){
-        return service.getByUsername(username);
+    public LoginUserResponse getByUsername(@PathVariable String username, @RequestBody LoginUserRequest request){
+        return service.login(username, request);
     }
 
     @PostMapping
-    public GetUserResponse create(@RequestBody PostUserRequest request){
+    public LoginUserResponse create(@RequestBody PostUserRequest request){
         return service.create(request);
     }
 

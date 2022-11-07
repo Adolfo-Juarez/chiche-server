@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import chiche.server.user.controllers.dtos.requests.LoginUserRequest;
 import chiche.server.user.controllers.dtos.requests.PostUserRequest;
 import chiche.server.user.controllers.dtos.requests.UpdateUserRequest;
 import chiche.server.user.controllers.dtos.responses.GetUserResponse;
+import chiche.server.user.controllers.dtos.responses.LoginUserResponse;
 import chiche.server.user.entities.User;
 import chiche.server.user.repositories.IUserRepository;
 import chiche.server.user.services.interfaces.IUserService;
@@ -38,13 +40,23 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public GetUserResponse create(PostUserRequest request) {
-        return getUserFromUser(repository.save(userFromPostRequest(request)));
+    public LoginUserResponse create(PostUserRequest request) {
+        return createAndLogin(request);
     }
-
+    
     @Override
     public void delete(String username) {
         repository.deleteById(repository.getByUsername(username).get(0).getId());
+    }
+    
+    @Override
+    public LoginUserResponse login(String username, LoginUserRequest request){
+        return validatePassword(username, request);
+    }
+    
+    @Override
+    public User findById(Long id){
+        return repository.findById(id).orElseThrow(()-> new RuntimeException("User no found"));
     }
 
     private User userFromPostRequest (PostUserRequest request){
@@ -75,9 +87,37 @@ public class UserServiceImpl implements IUserService{
         return user;
     }
 
-    @Override
-    public User findById(Long id){
-        return repository.findById(id).orElseThrow(()-> new RuntimeException("User no found"));
+    private LoginUserResponse validatePassword(String username, LoginUserRequest pwd){
+        LoginUserResponse response = new LoginUserResponse();
+        User user = repository.getByUsername(username).get(0);
+
+        if(!user.getPassword().equals(pwd.getPassword())){
+            response.setLogged(false);
+            return response;
+        }
+
+        response.setId(user.getId());
+        response.setLogged(true);
+        response.setUsername(user.getUsername());
+
+        return response;
     }
-    
+
+    private LoginUserResponse createAndLogin(PostUserRequest request){
+        LoginUserResponse response = new LoginUserResponse();
+
+        if(!repository.getByUsername(request.getUsername()).isEmpty()){
+            response.setLogged(false);
+            return response;
+        }
+
+        User user = repository.save(userFromPostRequest(request));
+
+        response.setId(user.getId());
+        response.setLogged(true);
+        response.setUsername(user.getUsername());
+
+        return response;
+    }
+
 }
