@@ -21,7 +21,7 @@ public class Tokens {
 
     /**
      * 
-     * Genera un web token bajo el algoritmo HS256 con subject, issuer, id y tiempo de vida decritos
+     * Genera un token bajo el algoritmo HS256 con subject, issuer, id y tiempo de vida especificado.
      * 
      * @param id - Indentificador único para tu token.
      * @param subject - A quién hace referencia el token.
@@ -76,14 +76,15 @@ public class Tokens {
      * Valida el token dado y regresa un claim, con el cuál podemos acceder a sus 
      * propiedades por medio de sus métodos
      * @param token - String del token a validar
-     * @return - Claim ó un Exception en caso de no tener la firma correcta, o haya expirado
+     * @return - Claim ó un Exception en caso de no tener la firma correcta, o el toke haya expirado
      */
-    public static Claims decode(String token){
+    public Claims decode(String token){
 
-        Claims claims = Jwts.parser() // Usamos el convertidor de JWT
-                        .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY)) // Declaramos el SECRET KEY para decodificar el token
-                        .parseClaimsJws(token) // Pasamos el token a convertir
-                        .getBody(); // Recuperamos sus datos
+        Claims claims = Jwts.parserBuilder() // Abrimos el contructor para decodificar el token
+                            .setSigningKey(SECRET_KEY) // Asignamod la SECRET KEY para validar la firma
+                            .build() // Cerramos el constructor
+                            .parseClaimsJws(token) // Pasamos nuestro token
+                            .getBody(); // Tratamos de obtener su contenido
     
         return claims;
 
