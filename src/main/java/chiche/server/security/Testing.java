@@ -30,7 +30,7 @@ public class Testing {
 
     @PostMapping("{weirdStuff}")
     public Boolean descrypt(@PathVariable String weirdStuff){
-        return encrypt.validate(weirdStuff,"[C@3a13ce");
+        return encrypt.validate(weirdStuff,"$2a$10$..VDJGYj.oVzH6fv2twnT.FnzWvn.SjyLXKhY9Tp6ztYI7WJZjZ/i");
     }
 
 }
