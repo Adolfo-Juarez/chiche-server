@@ -1,22 +1,15 @@
 package chiche.server.security;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class Encryptor {
 
     public String encrypt(String data){
-        return (BCrypt.with(BCrypt.Version.VERSION_2Y)
-                .hashToChar(6, data.toCharArray()))
-                .toString();
+        return BCrypt.hashpw(data, BCrypt.gensalt(10));
     }
 
     public Boolean validate(String password, String encryptedData){
-        return BCrypt
-                .verifyer()
-                .verify(encryptedData.toCharArray(), 
-                BCrypt.with(BCrypt.Version.VERSION_2Y)
-                .hashToChar(6, password.toCharArray()))
-                .verified;
+        return BCrypt.checkpw(password, encryptedData);
     }
 
 }
