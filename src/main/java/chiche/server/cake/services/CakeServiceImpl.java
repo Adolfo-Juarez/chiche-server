@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import antlr.Token;
 import chiche.server.cake.controllers.dtos.requests.PostCakeRequest;
-import chiche.server.cake.controllers.dtos.requests.UpdateCakeRequest;
 import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.entities.Cake;
 import chiche.server.cake.repositories.ICakeRepository;
@@ -62,9 +62,17 @@ public class CakeServiceImpl implements ICakeService {
     }
 
     @Override
-    public GetCakeResponse update(Long id, UpdateCakeRequest request) {
+    public GetCakeResponse finish(Long id, String token) {
+        Tokens tk = new Tokens();
+
+        if(!tk.validate(token)){
+            GetCakeResponse response = new GetCakeResponse();
+            response.setStatus("Invalid Token");
+            return response;
+        }
+
         return cakeToGetCakeResponse(
-                repository.save(updateCake(id, request)));
+                repository.save(finishOrder(id)));
     }
 
     @Override
@@ -72,39 +80,45 @@ public class CakeServiceImpl implements ICakeService {
         repository.deleteById(id);
     }
 
-    private Cake updateCake(Long id, UpdateCakeRequest req) {
+    @Override
+    public List<GetCakeResponse> list(String token) {
+        Tokens tk = new Tokens();
+
+        if (tk.validate(token)) {
+            return userService.findById(tk.readId(token))
+                    .getCakes()
+                    .stream()
+                    .map(this::cakeToGetCakeResponse)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<GetCakeResponse> listNoFinished(String token) {
+
+        Tokens tk = new Tokens();
+
+        if (tk.readPrivilegies(token).equals("admin")) {
+
+            return repository.getByUnfinish(false)
+                    .stream()
+                    .map(this::cakeToGetCakeResponse)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
+
+    }
+
+    private Cake finishOrder(Long id) {
 
         Cake cake = repository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("No se ha encontrado un pastel para actualizar"));
 
-        if (!req.getBiscuit().isBlank()) {
-            cake.setBiscuit(req.getBiscuit());
-        }
-
-        if (!req.getCoverage().isBlank()) {
-            cake.setCoverage(req.getCoverage());
-        }
-
-        if (!req.getDesign().isBlank()) {
-            cake.setDesign(req.getDesign());
-        }
-
-        if (!req.getFilling().isBlank()) {
-            cake.setFilling(req.getFilling());
-        }
-
-        if (!req.getShape().isBlank()) {
-            cake.setShape(req.getShape());
-        }
-
-        if (!req.isFinish()) {
-            cake.setFinish(req.isFinish());
-        }
-
-        if (!req.getSize().isBlank()) {
-            cake.setSize(req.getSize());
-        }
+        cake.setFinish(true);
 
         return cake;
 
