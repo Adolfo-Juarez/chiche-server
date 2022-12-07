@@ -6,15 +6,19 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import chiche.server.security.Encryptor;
+import chiche.server.security.Tokens;
+import chiche.server.user.controllers.dtos.requests.LoginUserRequest;
 import chiche.server.user.controllers.dtos.requests.PostUserRequest;
 import chiche.server.user.controllers.dtos.requests.UpdateUserRequest;
 import chiche.server.user.controllers.dtos.responses.GetUserResponse;
+import chiche.server.user.controllers.dtos.responses.LoginResponse;
 import chiche.server.user.entities.User;
 import chiche.server.user.repositories.IUserRepository;
 import chiche.server.user.services.interfaces.IUserService;
 
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
 
     @Autowired
     IUserRepository repository;
@@ -29,7 +33,7 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public GetUserResponse getByUsername(String username) {
-        return getUserFromUser(repository.getByUsername(username).get(0));
+        return getUserFromUser(repository.getByEmail(username).get(0));
     }
 
     @Override
@@ -44,21 +48,57 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void delete(String username) {
-        repository.deleteById(repository.getByUsername(username).get(0).getId());
+        repository.deleteById(repository.getByEmail(username).get(0).getId());
     }
 
-    private User userFromPostRequest (PostUserRequest request){
+    @Override
+    public LoginResponse login(LoginUserRequest request) {
+        return null;
+
+    }
+
+    @Override
+    public LoginResponse register(PostUserRequest request) {
+        LoginResponse reponse = new LoginResponse();
+
+        if (!repository.getByEmail(request.getEmail()).isEmpty()) {
+            reponse.setAuthorized(false);
+            reponse.setToken("not available");
+            return reponse;
+        }
+
+        return loginResponseFromUser(repository.save(userFromPostRequest(request)));
+
+    }
+
+    private User userFromPostRequest(PostUserRequest request) {
+        Encryptor encry = new Encryptor();
+
         User user = new User();
 
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(encry.encrypt(request.getPassword()));
         user.setRole(request.getRole());
 
         return user;
     }
 
-    private GetUserResponse getUserFromUser(User user){
+    private LoginResponse loginResponseFromUser(User user) {
+        Tokens token = new Tokens();
+        LoginResponse response = new LoginResponse();
+
+        response.setAuthorized(true);
+        response.setToken(token.generateToken(
+                user.getId().toString(),
+                user.getRole(),
+                user.getUsername(),
+                (long) 3600000));
+
+        return response;
+    }
+
+    private GetUserResponse getUserFromUser(User user) {
         GetUserResponse response = new GetUserResponse();
 
         response.setId(user.getId());
@@ -67,17 +107,17 @@ public class UserServiceImpl implements IUserService{
         return response;
     }
 
-    private User userFromUpdateRequest(UpdateUserRequest request, String Username){
-        User user = repository.getByUsername(Username).get(0);
-        
+    private User userFromUpdateRequest(UpdateUserRequest request, String Username) {
+        User user = repository.getByEmail(Username).get(0);
+
         user.setUsername(request.getUsername());
 
         return user;
     }
 
     @Override
-    public User findById(Long id){
-        return repository.findById(id).orElseThrow(()-> new RuntimeException("User no found"));
+    public User findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("User no found"));
     }
-    
+
 }
