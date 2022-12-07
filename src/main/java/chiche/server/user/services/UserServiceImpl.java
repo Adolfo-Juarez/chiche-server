@@ -53,18 +53,37 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public LoginResponse login(LoginUserRequest request) {
-        return null;
+
+        Encryptor encryp = new Encryptor();
+
+        LoginResponse response = new LoginResponse();
+
+        List<User> users = repository.getByEmail(request.getEmail());
+
+        if (users.isEmpty()) {
+            response.setAuthorized(false);
+            response.setToken("email not found");
+            return response;
+        }
+
+        if(!encryp.validate(request.getPassword(), users.get(0).getPassword())){
+            response.setAuthorized(false);
+            response.setToken("password dont match");
+            return response;
+        }
+
+        return loginResponseFromUser(users.get(0));
 
     }
 
     @Override
     public LoginResponse register(PostUserRequest request) {
-        LoginResponse reponse = new LoginResponse();
+        LoginResponse response = new LoginResponse();
 
         if (!repository.getByEmail(request.getEmail()).isEmpty()) {
-            reponse.setAuthorized(false);
-            reponse.setToken("not available");
-            return reponse;
+            response.setAuthorized(false);
+            response.setToken("not available");
+            return response;
         }
 
         return loginResponseFromUser(repository.save(userFromPostRequest(request)));

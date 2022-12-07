@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import chiche.server.user.controllers.dtos.requests.LoginUserRequest;
 import chiche.server.user.controllers.dtos.requests.PostUserRequest;
 import chiche.server.user.controllers.dtos.requests.UpdateUserRequest;
 import chiche.server.user.controllers.dtos.responses.GetUserResponse;
@@ -37,8 +38,13 @@ public class UserController {
         return service.getByUsername(username);
     }
 
+    @PostMapping("login")
+    public LoginResponse login(@RequestBody LoginUserRequest request){
+        return service.login(request);
+    }
+
     @PostMapping
-    public LoginResponse login(@RequestBody PostUserRequest request){
+    public LoginResponse register(@RequestBody PostUserRequest request){
         return service.register(request);
     }
 
