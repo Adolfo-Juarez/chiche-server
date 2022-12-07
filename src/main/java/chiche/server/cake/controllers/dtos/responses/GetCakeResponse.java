@@ -9,7 +9,7 @@ import lombok.Setter;
 public class GetCakeResponse {
 
     private Long id;
-    private String status;
+    private String status="great";
     private String biscuit;
     private String filling;
     private String coverage;
