@@ -95,17 +95,19 @@ VALUES
     (
         NULL,
         'admin@mail.com',
-        '12345',
+        '$2a$10$mjoxaZ/GPIeIUEt07S6fYugKTJE6xmtVglsauBTkxK1/F2ysdCWHu',
         'admin',
-        'AdolfoJuarez'
+        'Adolfo Juarez'
     ),
     (
         NULL,
         'client@mail.com',
-        '12345',
+        '$2a$10$LmH0EY9wWT2bvxzoGpNqkOqum.0IcdCt2y2pKX30bGx2QoNUl9c9e',
         'client',
-        'DiegoCarmona'
+        'Diego Carmona'
     );
+
+    -- taco1 y taco2
 
 INSERT INTO
     chiche.prices (id, description, price, type)

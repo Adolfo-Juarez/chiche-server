@@ -12,7 +12,7 @@ public interface ICakeService {
     public List<GetCakeResponse> list();
     public GetCakeResponse get(Long id);
 
-    public GetCakeResponse create(PostCakeRequest request);
+    public GetCakeResponse create(PostCakeRequest request, String token);
     public GetCakeResponse update(Long id,UpdateCakeRequest request);
 
     public void delete(Long id);
