@@ -15,6 +15,7 @@ import chiche.server.cake.repositories.ICakeRepository;
 import chiche.server.cake.services.interfaces.ICakeService;
 import chiche.server.price.services.interfaces.IPriceService;
 import chiche.server.security.Tokens;
+import chiche.server.user.services.interfaces.IUserService;
 
 @Service
 public class CakeServiceImpl implements ICakeService {
@@ -24,6 +25,9 @@ public class CakeServiceImpl implements ICakeService {
 
     @Autowired
     IPriceService priceService;
+
+    @Autowired
+    IUserService userService;
 
     @Override
     public List<GetCakeResponse> list() {
@@ -54,7 +58,7 @@ public class CakeServiceImpl implements ICakeService {
         }
 
         return cakeToGetCakeResponse(
-                repository.save(postCakeReqToCake(request)));
+                repository.save(postCakeReqToCake(request, token)));
     }
 
     @Override
@@ -126,8 +130,9 @@ public class CakeServiceImpl implements ICakeService {
         return response;
     }
 
-    private Cake postCakeReqToCake(PostCakeRequest request) {
+    private Cake postCakeReqToCake(PostCakeRequest request, String token) {
 
+        Tokens tk = new Tokens();
         float subtotal = 0;
         Cake cake = new Cake();
 
@@ -154,6 +159,8 @@ public class CakeServiceImpl implements ICakeService {
 
         cake.setFinish(false);
         cake.setOrderedAt(new Date());
+
+        cake.setUser(userService.findById(tk.readId(token)));
 
         return cake;
 

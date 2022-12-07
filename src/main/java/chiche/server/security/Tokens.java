@@ -112,4 +112,14 @@ public class Tokens {
                             .getSubject();
     }
 
+
+    public Long readId(String token){
+        return Long.parseLong(Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getId());
+    }
+
 }

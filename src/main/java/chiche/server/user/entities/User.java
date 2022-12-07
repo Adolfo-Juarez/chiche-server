@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import chiche.server.order.entities.Order;
+import chiche.server.cake.entities.Cake;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +28,7 @@ public class User {
     private String role;
 
     @OneToMany(mappedBy = "user")
-    private List<Order> order;
+    private List<Cake> cakes;
+
 
 }
