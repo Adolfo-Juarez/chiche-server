@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import chiche.server.cake.controllers.dtos.requests.PostCakeRequest;
 import chiche.server.cake.controllers.dtos.requests.UpdateCakeRequest;
 import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.services.interfaces.ICakeService;
+import chiche.server.utility.TokensTransform;
 
 @CrossOrigin
 @RestController
@@ -37,8 +39,9 @@ public class CakeController {
     }
 
     @PostMapping
-    public GetCakeResponse create(@RequestBody PostCakeRequest request){
-        return service.create(request);
+    public GetCakeResponse create(@RequestBody PostCakeRequest request, @RequestHeader(value = "Authorization") String token){
+        TokensTransform tk = new TokensTransform();
+        return service.create(request, tk.getToken(token));
     }
 
     @PutMapping("{id}")

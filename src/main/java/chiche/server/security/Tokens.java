@@ -85,23 +85,32 @@ public class Tokens {
      * @return - Claim ó un Exception en caso de no tener la firma correcta, o el
      *         toke haya expirado
      */
-    public Claims decode(String token) {
+    public Boolean validate(String token) {
         try {
 
-            Claims claims = Jwts.parserBuilder() // Abrimos el contructor para decodificar el token
+            Jwts.parserBuilder() // Abrimos el contructor para decodificar el token
                     .setSigningKey(SECRET_KEY) // Asignamod la SECRET KEY para validar la firma
                     .build() // Cerramos el constructor
                     .parseClaimsJws(token) // Pasamos nuestro token
                     .getBody(); // Tratamos de obtener su contenido
 
-            return claims;
+            return true;
 
         } catch (JwtException e) {
 
-            return null;
+            return false;
 
         }
 
+    }
+
+    public String readPrivilegies(String token){
+        return Jwts.parserBuilder()
+                            .setSigningKey(SECRET_KEY)
+                            .build()
+                            .parseClaimsJws(token)
+                            .getBody()
+                            .getSubject();
     }
 
 }

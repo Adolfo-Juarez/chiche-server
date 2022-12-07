@@ -39,7 +39,7 @@ public class Testing {
 
     @GetMapping("h")
     public String header(@RequestHeader(value = "Authorization") String au) {
-        return token.decode(util.getToken(au)).toString();
+        return token.validate(util.getToken(au)).toString();
     }
 
 }
