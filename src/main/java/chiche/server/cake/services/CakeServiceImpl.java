@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import antlr.Token;
 import chiche.server.cake.controllers.dtos.requests.PostCakeRequest;
 import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.entities.Cake;
@@ -65,7 +64,7 @@ public class CakeServiceImpl implements ICakeService {
     public GetCakeResponse finish(Long id, String token) {
         Tokens tk = new Tokens();
 
-        if(!tk.validate(token)){
+        if (!tk.validate(token)) {
             GetCakeResponse response = new GetCakeResponse();
             response.setStatus("Invalid Token");
             return response;
