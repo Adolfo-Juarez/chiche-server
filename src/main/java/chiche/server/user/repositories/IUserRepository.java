@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long>{
 
-    @Query(value = "SELECT * FROM users WHERE users.username = :username", nativeQuery = true)
-    public List<User> getByUsername (String username);
+    @Query(value = "SELECT * FROM users WHERE users.email = :email", nativeQuery = true)
+    public List<User> getByEmail (String email);
 
 }
