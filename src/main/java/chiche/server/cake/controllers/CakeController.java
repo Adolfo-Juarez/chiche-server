@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import chiche.server.cake.controllers.dtos.requests.PostCakeRequest;
-import chiche.server.cake.controllers.dtos.requests.UpdateCakeRequest;
 import chiche.server.cake.controllers.dtos.responses.GetCakeResponse;
 import chiche.server.cake.services.interfaces.ICakeService;
 import chiche.server.utility.TokensTransform;
@@ -29,28 +28,38 @@ public class CakeController {
     ICakeService service;
 
     @GetMapping("{id}")
-    public GetCakeResponse get(@PathVariable Long id){
+    public GetCakeResponse get(@PathVariable Long id) {
         return service.get(id);
     }
 
     @GetMapping
-    public List<GetCakeResponse> list(){
-        return service.list();
+    public List<GetCakeResponse> list(@RequestHeader(value = "Authorization") String token) {
+        TokensTransform tk = new TokensTransform();
+        return service.listNoFinished(tk.getToken(token));
+    }
+
+    @GetMapping("order")
+    public List<GetCakeResponse> myOrders(@RequestHeader(value = "Authorization") String token) {
+        TokensTransform tk = new TokensTransform();
+        return service.list(tk.getToken(token));
     }
 
     @PostMapping
-    public GetCakeResponse create(@RequestBody PostCakeRequest request, @RequestHeader(value = "Authorization") String token){
+    public GetCakeResponse create(@RequestBody PostCakeRequest request,
+            @RequestHeader(value = "Authorization") String token) {
         TokensTransform tk = new TokensTransform();
         return service.create(request, tk.getToken(token));
     }
 
     @PutMapping("{id}")
-    public GetCakeResponse update(@PathVariable Long id, @RequestBody UpdateCakeRequest request){
-        return service.update(id, request);
+    public GetCakeResponse update(@PathVariable Long id,@RequestHeader(value = "Authorization") String token) {
+        TokensTransform tk = new TokensTransform();
+        return service.finish(id, tk.getToken(token));
     }
 
+
     @DeleteMapping("{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 
